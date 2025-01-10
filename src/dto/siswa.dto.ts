@@ -1,6 +1,6 @@
 export class SiswaResponse {
     id : string
-    nama : string
+    nama? : string
     nis : number
     rayon : string
     jurusan : string
@@ -13,3 +13,11 @@ export class CreateSiswaRequest {
     rayon : string
     jurusan : string
 }
+
+export class UpdateSiswaRequest {
+    nama : string
+    nis : number
+    rayon : string
+    jurusan : string
+}
+
