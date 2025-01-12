@@ -4,10 +4,6 @@ import { AppModule } from "../src/app.module"
 import { Test, TestingModule } from "@nestjs/testing"
 import { TestModule } from "./test.module"
 import * as request from "supertest"
-import { response } from "express"
-import { retry } from "rxjs"
-import { get } from "http"
-import exp from "constants"
 
 describe('Siswa Controller', () => {
   let app : INestApplication

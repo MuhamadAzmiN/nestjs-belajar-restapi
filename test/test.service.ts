@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../src/common/prisma.service";
 import { Siswa } from "@prisma/client";
+import * as bcrypt from "bcrypt";
+import { retry } from "rxjs";
 
 
 
@@ -12,6 +14,7 @@ export class TestService{
 
     async deleteAll(){
         await this.deleteAllDataSiswa()
+        await this.deleteUser()
     }
     async deleteAllDataSiswa(){
         await this.prismaService.siswa.deleteMany({
@@ -42,6 +45,26 @@ export class TestService{
                nama : "test"
            }
         })
+    }
+
+
+    async deleteUser(){
+        await this.prismaService.user.deleteMany({
+            where : {
+                username : "test"
+            }
+        })
+    }
+
+    async createDataUser() {
+        await this.prismaService.user.create({
+            data : {
+                email : "test",
+                password : await bcrypt.hash("test", 10),
+                username : "test",
+                token : "test"
+            }
+        })  
     }
     
 

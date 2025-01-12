@@ -1,12 +1,22 @@
-import { Module } from "@nestjs/common";
-import { UserModule } from './user/siswa.module';
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
+import { SiswaModule } from './siswa/siswa.module';
 import { CommonModule } from "./common/common.module";
+import { UserModule } from './user/user.module';
+import { AuthMiddleware } from "./common/auth.middleware";
+
 
 @Module({
-    imports : [CommonModule, UserModule],
+    imports : [CommonModule, SiswaModule, UserModule],
     controllers : [],
-    providers : []
+    providers : [],
+    
 })
 
 
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+        .apply(AuthMiddleware)
+        .forRoutes('/api/user/');
+    }
+}

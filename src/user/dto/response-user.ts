@@ -1,0 +1,6 @@
+export class UserResponse {
+    id? : string
+    email : string
+    username : string
+    token? : string
+}

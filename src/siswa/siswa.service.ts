@@ -1,13 +1,11 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../common/prisma.service';
-import { CreateSiswaRequest, SiswaResponse } from '../dto/siswa.dto';
+import { PrismaService } from '../common/prisma.service'
+import { CreateSiswaRequest, SiswaResponse } from './dto/siswa.dto';
 import { SiswaValidation } from './siswa.validation';
 import { ValidationService } from '../common/validation.service';
-import { retry } from 'rxjs';
-import { Siswa } from '@prisma/client';
 
 @Injectable()
-export class UserService {  
+export class SiswaService {  
    constructor(
     private prismaService : PrismaService,
     private validationService : ValidationService

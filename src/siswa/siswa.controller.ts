@@ -1,12 +1,12 @@
 import { Body, Controller, Get, HttpCode, Post, Param, Delete, Put } from '@nestjs/common';
-import { UserService } from './siswa.service';
-import { CreateSiswaRequest, SiswaResponse } from '../dto/siswa.dto';
+import { SiswaService } from './siswa.service';
+import { CreateSiswaRequest, SiswaResponse } from './dto/siswa.dto';
 import { retry } from 'rxjs';
 import { Siswa } from '@prisma/client';
-import { WebResponse } from 'src/dto/web.dto';
+import { WebResponse } from 'src/response/web.dto';
 @Controller('/api/siswa')
-export class UserController {
-    constructor(private userService : UserService) {}
+export class SiswaController {
+    constructor(private userService : SiswaService) {}
 
     @Post()
     @HttpCode(201)
