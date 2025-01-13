@@ -4,10 +4,7 @@ import { AppModule } from "../src/app.module"
 import { Test, TestingModule } from "@nestjs/testing"
 import { TestModule } from "./test.module"
 import * as request from "supertest"
-import { after } from "node:test"
-import { exec } from "child_process"
 import exp from "constants"
-import { response } from "express"
 
 describe('User Controller', () => {
     let app : INestApplication
@@ -51,17 +48,42 @@ describe('User Controller', () => {
               email : "test",
               password : "test"
           })
-
-          console.log(response.body)
-
         
           expect(response.statusCode).toBe(200)
           expect(response.body.data.email).toBe("test")
           expect(response.body.data.token).toBeDefined()
       })
+    })
 
-   
+    describe('/GET /api/user/me', () => {
+        beforeEach(async () => {
+            await testService.deleteAll()
+            await testService.createDataUser()
+        })
+
+        it('should get user profile', async () => {
+            const response = await request(app.getHttpServer()).get('/api/user/me').set('authorization', `Bearer ${"test"}`).send({})
+            expect(response.statusCode).toBe(200)
+            expect(response.body.data.username).toBe("test")
+            expect(response.body.data.email).toBe("test")
+        })
     })
     
-  
+
+    describe('/POST /api/user/logout', () => {
+      beforeEach(async () => {
+          await testService.deleteAll()
+          await testService.createDataUser()
+      })
+
+      it('should logout user', async () => {
+          let testUser = await testService.getUser()
+          const response = await request(app.getHttpServer()).delete('/api/user/logout').set('authorization', `Bearer ${"test"}`).send({})
+          expect(response.statusCode).toBe(200)
+
+          testUser = await testService.getUser()
+          expect(testUser.token).toBeNull()
+      })
+    })
+    
 })

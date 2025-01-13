@@ -38,8 +38,7 @@ export class TestService{
         })
     }
 
-
-    async getUser() : Promise<Siswa>{
+    async getSiswa() : Promise<Siswa>{
        return this.prismaService.siswa.findFirst({
            where : {
                nama : "test"
@@ -65,6 +64,14 @@ export class TestService{
                 token : "test"
             }
         })  
+    }
+
+    async getUser() : Promise<any>{
+        return this.prismaService.user.findFirst({
+            where : {
+                username : "test"
+            }
+        })
     }
     
 

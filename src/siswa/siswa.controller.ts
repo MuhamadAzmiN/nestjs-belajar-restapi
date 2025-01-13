@@ -1,24 +1,32 @@
-import { Body, Controller, Get, HttpCode, Post, Param, Delete, Put } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { SiswaService } from './siswa.service';
 import { CreateSiswaRequest, SiswaResponse } from './dto/siswa.dto';
-import { retry } from 'rxjs';
-import { Siswa } from '@prisma/client';
 import { WebResponse } from 'src/response/web.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { AuthMiddleware } from '../common/auth.middleware';
+import { Auth } from '../common/auth.decorator';
+
+
+
+@UseGuards(AuthMiddleware)
 @Controller('/api/siswa')
+
 export class SiswaController {
     constructor(private userService : SiswaService) {}
-
+    
     @Post()
     @HttpCode(201)
-    async create(@Body() request : CreateSiswaRequest) : Promise<WebResponse<SiswaResponse>> {
+    @ApiBearerAuth()
+    async create(@Auth() user : any, @Body() request : CreateSiswaRequest) : Promise<WebResponse<SiswaResponse>> {
         const result = await this.userService.createUser(request)
         return {
             data : result
         }
     }
-
+    
     @Get()
-    async getUsers() : Promise<WebResponse<SiswaResponse[]>> {
+    @ApiBearerAuth()
+    async getUsers(@Auth() user : any ) : Promise<WebResponse<SiswaResponse[]>> {
         const result = await this.userService.getUsers()
         return {
             data : result 
@@ -27,8 +35,9 @@ export class SiswaController {
 
 
     @Get(':id')
+    @ApiBearerAuth()
 
-    async getUserByid(@Param('id') id : string) : Promise<WebResponse<SiswaResponse>> {
+    async getUserByid(@Auth() user : any ,@Param('id') id : string) : Promise<WebResponse<SiswaResponse>> {
         const result = await this.userService.getUserByid(id)
         return {
             data : result 
@@ -36,8 +45,12 @@ export class SiswaController {
     }
 
 
+    
+
+
     @Delete(':id')
-    async deleteUser(@Param('id') id : string) : Promise<WebResponse<SiswaResponse>> {
+    @ApiBearerAuth()
+    async deleteUser(@Auth() user : any ,@Param('id') id : string) : Promise<WebResponse<SiswaResponse>> {
         const result = await this.userService.deleteUser(id)
         return {
             data : result 
@@ -45,11 +58,14 @@ export class SiswaController {
     }
 
     @Put('/update/:id')
-    async updateUser(@Param('id') id : string, @Body() request : CreateSiswaRequest) : Promise<WebResponse<SiswaResponse>> {
+    @ApiBearerAuth()
+    async updateUser(@Auth() user : any ,@Param('id') id : string, @Body() request : CreateSiswaRequest) : Promise<WebResponse<SiswaResponse>> {
         const result = await this.userService.updateUser(id, request)
         return {
             data : result
         }
     }
+
+    
     
 }

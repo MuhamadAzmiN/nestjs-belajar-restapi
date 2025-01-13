@@ -17,6 +17,7 @@ export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer
         .apply(AuthMiddleware)
-        .forRoutes('/api/user/');
+        .forRoutes('/api/user/', '/api/siswa/');
+    
     }
 }

@@ -22,11 +22,12 @@ describe('Siswa Controller', () => {
 
 
   describe('POST /api/siswa', () => {
-    afterEach(async () => {
-      await testService.deleteAllDataSiswa()
+    beforeEach(async () => {
+      await testService.deleteAll()
+      await testService.createDataUser()
     })
     it('should create a new siswa', async () => {
-        const result = await request(app.getHttpServer()).post('/api/siswa').send(
+        const result = await request(app.getHttpServer()).post('/api/siswa').set('authorization', `Bearer ${"test"}`).send(
           {
             nama : "test",
             nis : 12341,
@@ -47,8 +48,12 @@ describe('Siswa Controller', () => {
 
 
   describe('GET /api/siswa', () => {
+    beforeEach(async () => {
+      await testService.deleteAll()
+      await testService.createDataUser()
+    })
     it('should get all siswa', async () => {
-      const response = await request(app.getHttpServer()).get('/api/siswa').send({});
+      const response = await request(app.getHttpServer()).get('/api/siswa').set('authorization', `Bearer ${"test"}`).send({});
       expect(response.statusCode).toBe(200)
     })
 
@@ -57,16 +62,14 @@ describe('Siswa Controller', () => {
 
   describe('GET /api/siswa/:id ', () => {
     beforeEach(async () => {
+      await testService.deleteAll()
+      await testService.createDataUser()
       await testService.createDataSiswa()
     })
-
-
-    afterEach(async () => {
-      await testService.deleteAllDataSiswa()
-    })
     it('should get data by id', async () => {
-      const siswa = await testService.getUser()
-      const response = await request(app.getHttpServer()).get(`/api/siswa/${siswa.id}`).send({});
+      const siswa = await testService.getSiswa()
+      const response = await request(app.getHttpServer()).get(`/api/siswa/${siswa.id}`).set('authorization', `Bearer ${"test"}`).send({});
+      console.log(response.body)
       expect(response.statusCode).toBe(200)
     })
   })
@@ -74,36 +77,32 @@ describe('Siswa Controller', () => {
 
   describe('DELETE /api/siswa/:id', () => {
     beforeEach(async () => {
+      await testService.deleteAll()
+      await testService.createDataUser()
       await testService.createDataSiswa()
     })
-
-    afterEach(async () => {
-      await testService.deleteAllDataSiswa()
-    })
     it('should delete data by id', async () => {
-      let siswa = await testService.getUser()
-      const response = await request(app.getHttpServer()).delete(`/api/siswa/${siswa.id}`).send({});
+      let siswa = await testService.getSiswa()
+      const response = await request(app.getHttpServer()).delete(`/api/siswa/${siswa.id}`).set('authorization', `Bearer ${"test"}`).send({});
       expect(response.statusCode).toBe(200)
 
-      siswa = await testService.getUser()
+      siswa = await testService.getSiswa()
       expect(siswa).toBe(null)
       
     })
   })
 
 
-  describe('PUT /api/siswa/:id', () => {
-
+  describe('PUT /api/siswa/:id', () => {  
     beforeEach(async () => {
+      await testService.deleteAll()
+      await testService.createDataUser()
       await testService.createDataSiswa()
-    })
-    afterEach(async () => {
-      await testService.deleteAllDataSiswa()
     })
 
     it('should update data by id', async () => {
-      let siswa = await testService.getUser()
-      const response = await request(app.getHttpServer()).put(`/api/siswa/update/${siswa.id}`).send({
+      let siswa = await testService.getSiswa()
+      const response = await request(app.getHttpServer()).put(`/api/siswa/update/${siswa.id}`).set('authorization', `Bearer ${"test"}`).send({
         nama : "test2",
         nis : 12341,
         jurusan : "pplg",

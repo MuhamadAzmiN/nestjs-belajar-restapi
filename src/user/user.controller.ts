@@ -26,6 +26,7 @@ export class UserController {
 
   @Post('/login')
   @HttpCode(200)
+  
   async login(@Body() request : CreateUserDto) : Promise<WebResponse<UserResponse>>{
     const result = await this.userService.login(request)
     return {
@@ -46,8 +47,7 @@ export class UserController {
   }
 
 
-  @Put('/logout')
-
+  @Delete('/logout')
   @HttpCode(200)
   @ApiBearerAuth()
 
@@ -57,6 +57,9 @@ export class UserController {
       data : result
     }
   }
+
+
+
 
 
   

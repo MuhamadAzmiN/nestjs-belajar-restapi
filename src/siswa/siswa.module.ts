@@ -3,7 +3,10 @@ import { SiswaController } from './siswa.controller';
 import { SiswaService } from './siswa.service';
 
 @Module({
-  controllers: [SiswaController],
+  controllers: [ SiswaController],
   providers: [SiswaService]
 })
+
+
 export class SiswaModule {}
+
